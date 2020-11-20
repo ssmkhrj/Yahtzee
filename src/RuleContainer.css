@@ -1,0 +1,15 @@
+.RuleContainer-title {
+  background: rgba(0, 0, 0, 0.5);
+  margin: 1rem -1.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+  letter-spacing: 0.15rem;
+  padding: 0.2rem 0;
+}
+
+.RuleContainer-upper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: -0.5rem;
+}

@@ -16,11 +16,12 @@ class Die extends Component {
 
   render() {
     const { diceWords, value, locked, disabled, isRolling } = this.props;
-    let classes = `Die fas fa-dice-${diceWords[value - 1]} fa-5x`;
+    let classes = `Die fas fa-dice-${diceWords[value - 1]}`;
     if (locked) classes += " Die-locked";
     if (isRolling) classes += " Die-rolling";
+    if (disabled) classes += " Die-no-pointer";
     return (
-      <i className={classes} onClick={this.dieClicked} disabled={disabled}></i>
+      <i className={classes} onClick={disabled ? null : this.dieClicked}></i>
     );
   }
 }

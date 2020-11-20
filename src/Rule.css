@@ -1,0 +1,46 @@
+.RuleContainer-upper .Rule {
+  width: 31.5%;
+  margin-top: 0;
+}
+
+.Rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.Rule-score {
+  font-size: 1.2rem;
+  width: 50%;
+  text-align: right;
+}
+
+.Rule-active:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.Rule-disabled {
+  background: linear-gradient(
+    to right,
+    rgba(138, 157, 255, 0.7) 0%,
+    rgba(34, 166, 247, 0.7) 30%,
+    rgba(0, 0, 0, 0.5) 45%
+  );
+  background-size: 300% 300%;
+  animation: Slide 1s ease forwards;
+}
+
+@keyframes Slide {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}

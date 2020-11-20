@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Dice from "./Dice";
+import RuleContainer from "./RuleContainer";
 import "./Game.css";
 
 const NUM_DICE = 5;
@@ -12,6 +13,7 @@ class Game extends Component {
       dice: Array.from({ length: NUM_DICE }, () =>
         Math.ceil(Math.random() * 6)
       ),
+      scores: {},
       locked: Array(NUM_DICE).fill(false),
       rollsLeft: NUM_ROLLS,
       isRolling: false,
@@ -19,10 +21,11 @@ class Game extends Component {
     this.toggleLocked = this.toggleLocked.bind(this);
     this.roll = this.roll.bind(this);
     this.animateRoll = this.animateRoll.bind(this);
+    this.doScore = this.doScore.bind(this);
   }
 
   componentDidMount() {
-    this.animateRoll();
+    this.roll();
   }
 
   animateRoll() {
@@ -44,9 +47,6 @@ class Game extends Component {
   }
 
   toggleLocked(idx) {
-    // If no rolls are left OR dice are animating, locking cannot be toggled
-    if (!this.state.rollsLeft || this.state.isRolling) return;
-
     this.setState((st) => ({
       locked: [
         ...st.locked.slice(0, idx),
@@ -56,7 +56,7 @@ class Game extends Component {
     }));
   }
 
-  calcRerollMessage() {
+  displayRerollMessage() {
     const messages = [
       "0 Rerolls Left",
       "1 Reroll Left",
@@ -67,25 +67,56 @@ class Game extends Component {
     return messages[this.state.rollsLeft];
   }
 
+  doScore(ruleName, ruleFn, secondParam) {
+    this.setState((st) => ({
+      scores: {
+        ...st.scores,
+        [ruleName]: ruleFn(this.state.dice, secondParam),
+      },
+      rollsLeft: NUM_ROLLS,
+      locked: Array(NUM_DICE).fill(false),
+    }));
+    this.animateRoll();
+  }
+
+  getTotalScore() {
+    let totalScore = 0;
+    for (let key in this.state.scores) {
+      const sc = this.state.scores[key];
+      if (sc) totalScore += sc;
+    }
+    return totalScore;
+  }
+
   render() {
-    const { dice, locked, rollsLeft, isRolling } = this.state;
+    const { dice, scores, locked, rollsLeft, isRolling } = this.state;
     return (
       <div className="Game">
         <h1 className="Game-title">Yahtzee</h1>
         <Dice
           dice={dice}
           locked={locked}
-          disabled={rollsLeft === 0}
+          rollsLeft={rollsLeft}
           isRolling={isRolling}
           handleClick={this.toggleLocked}
         />
-        <button
-          className="Game-reroll-button"
-          onClick={this.animateRoll}
-          disabled={locked.every((d) => d) || isRolling}
-        >
-          {this.calcRerollMessage()}
-        </button>
+        <div className="Game-reroll-button-container">
+          <button
+            className="Game-reroll-button"
+            onClick={this.animateRoll}
+            disabled={locked.every((d) => d) || isRolling}
+          >
+            {this.displayRerollMessage()}
+          </button>
+        </div>
+        <RuleContainer
+          scores={scores}
+          doScore={this.doScore}
+          isRolling={isRolling}
+        />
+        <div className="Game-total-score">
+          Total Score: {this.getTotalScore()}
+        </div>
       </div>
     );
   }

@@ -13,10 +13,25 @@ class Game extends Component {
       dice: Array.from({ length: NUM_DICE }, () =>
         Math.ceil(Math.random() * 6)
       ),
-      scores: {},
+      scores: {
+        ones: undefined,
+        twos: undefined,
+        threes: undefined,
+        fours: undefined,
+        fives: undefined,
+        sixes: undefined,
+        threeOfKind: undefined,
+        fourOfKind: undefined,
+        fullHouse: undefined,
+        smallStraight: undefined,
+        largeStraight: undefined,
+        yahtzee: undefined,
+        chance: undefined,
+      },
       locked: Array(NUM_DICE).fill(false),
       rollsLeft: NUM_ROLLS,
       isRolling: false,
+      gameOver: false,
     };
     this.toggleLocked = this.toggleLocked.bind(this);
     this.roll = this.roll.bind(this);
@@ -76,6 +91,7 @@ class Game extends Component {
       rollsLeft: NUM_ROLLS,
       locked: Array(NUM_DICE).fill(false),
     }));
+    this.isGameOver();
     this.animateRoll();
   }
 
@@ -88,23 +104,34 @@ class Game extends Component {
     return totalScore;
   }
 
+  isGameOver() {
+    this.setState((st) => {
+      const gameOver = Object.values(st.scores).every((x) => x !== undefined);
+      if (!gameOver) return {};
+      return {
+        gameOver: true,
+        locked: Array(NUM_DICE).fill(true),
+      };
+    });
+  }
+
   render() {
-    const { dice, scores, locked, rollsLeft, isRolling } = this.state;
+    const { dice, scores, locked, rollsLeft, isRolling, gameOver } = this.state;
     return (
       <div className="Game">
         <h1 className="Game-title">Yahtzee</h1>
         <Dice
           dice={dice}
           locked={locked}
-          rollsLeft={rollsLeft}
           isRolling={isRolling}
+          disabled={rollsLeft === 0 || isRolling || gameOver}
           handleClick={this.toggleLocked}
         />
         <div className="Game-reroll-button-container">
           <button
             className="Game-reroll-button"
             onClick={this.animateRoll}
-            disabled={locked.every((d) => d) || isRolling}
+            disabled={locked.every((d) => d) || isRolling || gameOver}
           >
             {this.displayRerollMessage()}
           </button>

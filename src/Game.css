@@ -41,7 +41,7 @@
   );
 }
 
-.Game-reroll-button:hover {
+.Game-reroll-button:not([disabled]):hover {
   cursor: pointer;
   background-position: right center;
 }

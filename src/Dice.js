@@ -4,17 +4,18 @@ import "./Dice.css";
 
 class Dice extends Component {
   render() {
+    const { dice, locked, disabled, isRolling, handleClick } = this.props;
     return (
       <div className="Dice">
-        {this.props.dice.map((d, idx) => (
+        {dice.map((d, idx) => (
           <Die
             key={idx}
             idx={idx}
             value={d}
-            locked={this.props.locked[idx]}
-            disabled={this.props.rollsLeft === 0 || this.props.isRolling}
-            isRolling={this.props.isRolling && !this.props.locked[idx]}
-            handleClick={this.props.handleClick}
+            locked={locked[idx]}
+            disabled={disabled}
+            isRolling={isRolling && !locked[idx]}
+            handleClick={handleClick}
           />
         ))}
       </div>

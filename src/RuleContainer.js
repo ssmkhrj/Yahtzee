@@ -76,14 +76,14 @@ class RuleContainer extends Component {
           />
           <Rule
             name="Small Straight"
-            score={scores.smallstraight}
-            doScore={() => doScore("smallstraight", smallStraight, 30)}
+            score={scores.smallStraight}
+            doScore={() => doScore("smallStraight", smallStraight, 30)}
             isRolling={isRolling}
           />
           <Rule
             name="Large Straight"
-            score={scores.largestraight}
-            doScore={() => doScore("largestraight", largeStraight, 40)}
+            score={scores.largeStraight}
+            doScore={() => doScore("largeStraight", largeStraight, 40)}
             isRolling={isRolling}
           />
           <Rule
